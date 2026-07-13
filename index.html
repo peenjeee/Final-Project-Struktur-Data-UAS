@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Showcase aplikasi Watch List Film C++ yang berjalan langsung di browser dengan WebAssembly.">
+  <title>WBGL — C++ Watchlist</title>
+  <link rel="stylesheet" href="vendor/xterm/xterm.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="orb orb-one" aria-hidden="true"></div>
+  <div class="orb orb-two" aria-hidden="true"></div>
+
+  <main class="page-shell">
+    <section class="source-card" aria-labelledby="source-title">
+      <div class="source-heading">
+        <h2 id="source-title">Watch List Film</h2>
+        <button id="copy-code" class="copy-button" type="button" aria-label="Salin kode" title="Salin kode">
+          <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+            <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+          </svg>
+          <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m5 12 4 4L19 6"></path>
+          </svg>
+        </button>
+      </div>
+
+      <details open>
+        <summary title="Buka atau tutup source code">
+          <span class="source-file">Watch List Film.cpp</span>
+          <svg class="toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </summary>
+        <pre><code id="source-code">Memuat source code…</code></pre>
+      </details>
+    </section>
+
+    <section id="terminal-card" class="terminal-card" aria-labelledby="terminal-title">
+      <div class="terminal-toolbar">
+        <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p id="terminal-title">watch-list-film.cpp</p>
+      </div>
+
+      <div id="terminal" class="terminal" aria-label="Terminal interaktif program C++"></div>
+
+      <div class="terminal-actions">
+        <button id="run" class="run-button" type="button"><span aria-hidden="true">▶</span> Jalankan</button>
+        <button id="clear" class="clear-button" type="button">Bersihkan layar</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026</p>
+      <p>WBGL</p>
+    </footer>
+  </main>
+
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="Kembali ke atas" title="Kembali ke atas"
+    hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m6 15 6-6 6 6"></path>
+    </svg>
+  </button>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

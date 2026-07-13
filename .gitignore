@@ -1,0 +1,14 @@
+# Local tooling and editor settings
+.agents/
+.codex/
+.omx/
+.vercel/
+.vscode/
+
+# Dependencies and logs
+node_modules/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

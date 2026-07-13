@@ -3,7 +3,40 @@
 #include <queue>
 #include <iomanip>
 
+#ifdef __EMSCRIPTEN__
+#include <cstdlib>
+#include <emscripten.h>
+#include <streambuf>
+#endif
+
 using namespace std;
+
+#ifdef __EMSCRIPTEN__
+EM_ASYNC_JS(char*, terminalReadLine, (), {
+    const value = await globalThis.readTerminalLine();
+    const size = lengthBytesUTF8(value) + 1;
+    const result = _malloc(size);
+    stringToUTF8(value, result, size);
+    return result;
+});
+
+class TerminalInputBuffer : public streambuf {
+    string line;
+
+protected:
+    int_type underflow() override {
+        cout.flush();
+        char* input = terminalReadLine();
+        line = input ? input : "";
+        free(input);
+        line += '\n';
+        setg(line.data(), line.data(), line.data() + line.size());
+        return traits_type::to_int_type(*gptr());
+    }
+};
+
+TerminalInputBuffer terminalInput;
+#endif
 
 struct Film {
     string judul;
@@ -33,17 +66,17 @@ bool login(string username, string password) {
 void tambahFilm() {
     Film film;
     cout << "\n=== Tambah Film ===\n";
-    cout << "Masukkan judul film: ";
+    cout << "Masukkan judul film:\n";
     cin.ignore();
     getline(cin, film.judul);
-    cout << "Masukkan tahun rilis: ";
+    cout << "Masukkan tahun rilis:\n";
     cin >> film.tahunRilis;
     cin.ignore(); 
-    cout << "Masukkan genre: ";
+    cout << "Masukkan genre:\n";
     getline(cin, film.genre);
     for (int i = 0; i < 3; ++i) {
         film.aktor[i] = new string;
-        cout << "Masukkan aktor " << i + 1 << ": ";
+        cout << "Masukkan aktor " << i + 1 << ":\n";
         getline(cin, *film.aktor[i]);
     }
     watchlist.push(film);
@@ -66,7 +99,7 @@ void hapusFilm() {
 void hapusFilmBerdasarkanJudul() {
     string judul;
     cout << "\n=== Hapus Film Berdasarkan Judul ===\n";
-    cout << "Masukkan judul film yang ingin dihapus: ";
+    cout << "Masukkan judul film yang ingin dihapus:\n";
     cin.ignore();
     getline(cin, judul);
     queue<Film> tempQueue;
@@ -133,7 +166,7 @@ void tampilkanWatchlist() {
 void cariFilmBerdasarkanJudul() {
     string judul;
     cout << "\n=== Cari Film Berdasarkan Judul ===\n";
-    cout << "Masukkan judul film yang dicari: ";
+    cout << "Masukkan judul film yang dicari:\n";
     cin.ignore();
     getline(cin, judul);
     bool found = false;
@@ -160,7 +193,7 @@ void cariFilmBerdasarkanJudul() {
 void cariFilmBerdasarkanTahun() {
     int tahun;
     cout << "\n=== Cari Film Berdasarkan Tahun ===\n";
-    cout << "Masukkan tahun rilis film yang dicari: ";
+    cout << "Masukkan tahun rilis film yang dicari:\n";
     cin >> tahun;
     bool found = false;
     queue<Film> tempQueue = watchlist;
@@ -185,7 +218,7 @@ void cariFilmBerdasarkanTahun() {
 void cariFilmBerdasarkanAktor() {
     string aktor;
     cout << "\n=== Cari Film Berdasarkan Aktor ===\n";
-    cout << "Masukkan nama aktor yang dicari: ";
+    cout << "Masukkan nama aktor yang dicari:\n";
     cin.ignore();
     getline(cin, aktor);
     bool found = false;
@@ -219,11 +252,15 @@ void about(){
 }
 
 int main() {
+#ifdef __EMSCRIPTEN__
+    cin.rdbuf(&terminalInput);
+#endif
+
     string username, password;
     cout << "=== Login ===\n";
-    cout << "Masukkan username: ";
+    cout << "Masukkan username:\n";
     cin >> username;
-    cout << "Masukkan password: ";
+    cout << "Masukkan password:\n";
     cin >> password;
 
     if (!login(username, password)) {
@@ -244,7 +281,7 @@ int main() {
         cout << "8. Hapus Semua Film\n";
         cout << "9. About Us\n";
         cout << "10. Keluar\n";
-		cout << "Pilih opsi: ";
+		cout << "Pilih opsi:\n";
         cin >> pilihan;
 
         switch (pilihan) {
